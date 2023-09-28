@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios';
 
-const baseUrl='http://127.0.0.1:8000/api';
+const baseUrl = 'http://127.0.0.1:8000/api';
+
 function TeacherLogin() {
   const [teacherLoginData, setTeacherLoginData] = useState({
     email: "",
     password: "",
   });
+  const [errormsg, setErrorMsg] = useState('');
 
   const handleChange = (event) => {
     setTeacherLoginData({
@@ -16,28 +18,35 @@ function TeacherLogin() {
     });
   };
 
-  const submitForm = () => {
-    const teacherFormData=new FormData;
-    teacherFormData.append('email',teacherLoginData.email)
-    teacherFormData.append('password',teacherLoginData.password)
-    try{
-        axios.post(baseUrl+'/teacher-login',teacherFormData)
-        .then((res=>{
-            if (res.data.bool==true){
-                localStorage.setItem('teacherLoginStatus',true);
-                window.location.href='/teacherdashboard';
-            }
-           
-        }))
+  const submitForm = (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
 
-    }catch(error){
-        console.log(error);
+    const teacherFormData = new FormData();
+    teacherFormData.append('email', teacherLoginData.email);
+    teacherFormData.append('password', teacherLoginData.password);
+
+    try {
+      axios.post(baseUrl + '/teacher-login', teacherFormData)
+        .then((res) => {
+          if (res.data.bool === true) {
+            localStorage.setItem('teacherLoginStatus', true);
+            localStorage.setItem('teacherId', res.data.teacher_id);
+            window.location.href = '/teacherdashboard';
+          } else {
+            setErrorMsg('Invalid email or password');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
-  if(teacherLoginStatus=='true'){
-    window.location.href='/teacherdashboard';
+  const teacherLoginStatus = localStorage.getItem('teacherLoginStatus');
+  if (teacherLoginStatus === 'true') {
+    window.location.href = '/teacherdashboard';
   }
 
   return (
@@ -47,6 +56,7 @@ function TeacherLogin() {
           <div className="card">
             <h3 className="card-header">Teacher Login</h3>
             <div className="card-body">
+              {errormsg && <p className="text-danger">{errormsg}</p>}
               <form onSubmit={submitForm}>
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail1" className="form-label">
@@ -89,7 +99,7 @@ function TeacherLogin() {
                     Remember me
                   </label>
                 </div>
-                <button type="submit" onClick={submitForm} className="btn btn-primary">
+                <button type="submit" className="btn btn-primary">
                   Login
                 </button>
               </form>

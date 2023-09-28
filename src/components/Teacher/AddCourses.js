@@ -64,7 +64,7 @@ function AddCourses() {
       },
     })
       .then((res) => {
-        console.log(res.data);
+        window.location.href='/addcourses';
       })
       .catch((error) => {
         // Handle and log the error here

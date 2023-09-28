@@ -27,6 +27,7 @@ import PopularTeachers from './PopularTeachers';
 import CategoryCourses from './CategoryCourses';
 import TeacherLogout from './Teacher/TeacherLogout';
 import AddChapter from './Teacher/AddChapter';
+import CourseChapter from './Teacher/CourseChapter';
 
 
 function Main() {
@@ -55,11 +56,13 @@ function Main() {
             <Route path="/teacherchangepass" element={<TeacherChangePass/>}/>
             <Route path="/teacherdetail/:teacher_id" element={<TeacherDetail/>}/>
             <Route path="/allcourses" element={<AllCourses/>}/>
+            <Route path="/allchapters/:course_id" element={<CourseChapter/>}/>
             <Route path="/popularcourses" element={<PopularCourses/>}/>
             <Route path="/popularteachers" element={<PopularTeachers/>}/>
             <Route path="/category/:category_slug" element={<CategoryCourses/>}/>
             <Route path="/teacherlogout" element={<TeacherLogout/>}/>
             <Route path="/addchapter/:course_id" element={<AddChapter/>}/>
+            <Route path="/category/:category_slug" element={<CategoryCourses/>}/>
 
         </Routes>
         <Footer/>
