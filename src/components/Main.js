@@ -28,6 +28,7 @@ import CategoryCourses from './CategoryCourses';
 import TeacherLogout from './Teacher/TeacherLogout';
 import AddChapter from './Teacher/AddChapter';
 import CourseChapter from './Teacher/CourseChapter';
+import EditChapter from './Teacher/EditChapter'
 
 
 function Main() {
@@ -63,6 +64,8 @@ function Main() {
             <Route path="/teacherlogout" element={<TeacherLogout/>}/>
             <Route path="/addchapter/:course_id" element={<AddChapter/>}/>
             <Route path="/category/:category_slug" element={<CategoryCourses/>}/>
+            <Route path="/editchapter/:chapter_id" element={<EditChapter/>}/>
+          
 
         </Routes>
         <Footer/>

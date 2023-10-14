@@ -56,8 +56,9 @@ function Home() {
       </div>
       {/*end latest */}
          {/* popular courses courses */}
-    <h3 className="pb-1 my-4 mt-5">Popular Courses<Link to="/popularcourses" ClassName="float-end">see all</Link></h3>
-     <div className="row">
+  
+    <h3 className="pb-1 mb-4">Popular Courses<Link to="/popularcourses" className="float-end">see all</Link></h3>
+     <div className="row mb-4">
         <div className="col-md-3">
          <div className="card" >
           <a href="#"><img src="django.jpg" className="card-img-top" alt="..."/></a>
@@ -122,7 +123,8 @@ function Home() {
 
         
       </div>
-      <h3 className="pb-1 mb-4 my-4 ">Popular Teachers<Link to="/popularteachers" ClassName="float-end">see all</Link></h3>
+      <h3 className="pb-1 mb-4">Popular Teachers<Link to="/popularteachers" className="float-end">see all</Link></h3>
+     
      <div className="row">
         <div className="col-md-3">
          <div className="card" >
@@ -187,7 +189,7 @@ function Home() {
         
       </div>
       {/*end latest */}
-      <h3 className="pb-1 mb-4 my-4 ">Student Testimonial<a href="#" ClassName="float-end">see all</a></h3>
+      <h3 className="pb-1 mb-4 my-4 ">Student Testimonial<a href="#" className="float-end">see all</a></h3>
      
           {/* Add the carousel here */}
           <div id="carouselExampleIndicators1" className="carousel slide bg-dark text-white py-5" data-bs-ride="carousel">
@@ -198,31 +200,31 @@ function Home() {
             </div>
             <div className="carousel-inner">
               <div className="carousel-item active">
-              <figure ClassName="text-center">
-                <blockquote ClassName="blockquote">
+              <figure className="text-center">
+                <blockquote className="blockquote">
                     <p>A well-known quote, contained in a blockquote element.</p>
                 </blockquote>
-                <figcaption ClassName="blockquote-footer">
+                <figcaption className="blockquote-footer">
                     Someone famous in <cite title="Source Title">Source Title</cite>
                 </figcaption>
                 </figure>
               </div>
               <div className="carousel-item">
-              <figure ClassName="text-center">
-                <blockquote ClassName="blockquote">
+              <figure className="text-center">
+                <blockquote className="blockquote">
                     <p>A well-known quote, contained in a blockquote element.</p>
                 </blockquote>
-                <figcaption ClassName="blockquote-footer">
+                <figcaption className="blockquote-footer">
                     Someone famous in <cite title="Source Title">Source Title</cite>
                 </figcaption>
                 </figure>
               </div>
               <div className="carousel-item">
-              <figure ClassName="text-center">
-                <blockquote ClassName="blockquote">
+              <figure className="text-center">
+                <blockquote className="blockquote">
                     <p>A well-known quote, contained in a blockquote element.</p>
                 </blockquote>
-                <figcaption ClassName="blockquote-footer">
+                <figcaption className="blockquote-footer">
                     Someone famous in <cite title="Source Title">Source Title</cite>
                 </figcaption>
                 </figure>
