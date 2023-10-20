@@ -39,13 +39,15 @@ const handleDeleteClick = (chapter_id) => {
       try {
         axios.delete(baseUrl + '/chapter/' + chapter_id)
           .then((res) => {
-            console.log(res); // Corrected from "re" to "res"
-            setTotalResults(res.data.length);
-            setChapterData(res.data);
+            console.log(res);
+            // Remove the deleted chapter from chapterData and update the total count
+            const updatedChapterData = chapterData.filter(chapter => chapter.id !== chapter_id);
+            setChapterData(updatedChapterData);
+            setTotalResults(updatedChapterData.length);
             Swal.fire('Success', 'Data has been updated');
           })
           .catch((error) => {
-            Swal.fire('Error', 'Data has not been deleted');
+            Swal.fire('Error', 'Data not deleted');
           });
       } catch (error) {
         Swal.fire('Error', 'Data not deleted');
@@ -66,7 +68,7 @@ const handleDeleteClick = (chapter_id) => {
         </aside>
         <section className='col-md-9'>
           <div className='card'>
-            <div className='card-header'>all chapter({totalresults})</div>
+            <div className='card-header'>all chapters({totalresults})<Link className='btn btn-success float-end btn-sm' to={'/addchapter/'+course_id}>Add Chapter</Link></div>
             <div className='card-body'>
             <table className="table table-bordered">
                                 <thead>

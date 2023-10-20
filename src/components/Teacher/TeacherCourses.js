@@ -51,8 +51,10 @@ console.log(courseData);
                                     <td><Link to={'/allchapters/'+course.id}>{course.title}</Link></td>
                                     <td><img src={course.featured_img} width='80' className="rounded" alt={course.title}></img></td>
                                     <td><Link to='#'>22</Link></td>
-                                    <td><button className="btn btn-danger btn-sm ">delete</button>
+                                    <td>
+                                    <Link className="btn btn-info btn-sm " to={`/editcourse/${course.id}`}>Edit</Link>
                                     <Link className="btn btn-success btn-sm ms-2" to={`/addchapter/${course.id}`}>Add chapter</Link>
+                                    <button className="btn btn-danger btn-sm ms-2">delete</button>
                                     </td>
                                     </tr>
                                     )}
