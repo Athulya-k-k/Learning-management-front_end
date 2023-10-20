@@ -26,17 +26,36 @@ function CourseChapter() {
 },[]);
 console.log(chapterData);
 
-const Swal=require('sweetalert2');
-const handleDeleteClick=()=>{
+const Swal = require('sweetalert2');
+const handleDeleteClick = (chapter_id) => {
   Swal.fire({
-    title:'confirm',
-    text:'Are you sure you want to delete this',
-    icon:'info',
-    confirmButtonText:'Continue',
-    showCancelButton:true
-  })
+    title: 'Confirm',
+    text: 'Are you sure you want to delete this',
+    icon: 'info',
+    confirmButtonText: 'Continue',
+    showCancelButton: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        axios.delete(baseUrl + '/chapter/' + chapter_id)
+          .then((res) => {
+            console.log(res); // Corrected from "re" to "res"
+            setTotalResults(res.data.length);
+            setChapterData(res.data);
+            Swal.fire('Success', 'Data has been updated');
+          })
+          .catch((error) => {
+            Swal.fire('Error', 'Data has not been deleted');
+          });
+      } catch (error) {
+        Swal.fire('Error', 'Data not deleted');
+      }
+    } else {
+      Swal.fire('Error', 'Data not deleted');
+    }
+  });
+};
 
-}
 
   return (
     <div className='container mt-4'>
@@ -59,23 +78,34 @@ const handleDeleteClick=()=>{
                                     </tr>
                                 </thead>
                                 <tbody>
-  {chapterData.map((chapter, index) => (
-    <tr key={index}>
-      <td><Link to={`/editchapter`+chapter.id}>{chapter.title}</Link></td>
-      <td>
-        <video controls width='250'>
-        
-          <source src={chapter.video.url} type='video/webm' />
-          <source src={chapter.video.url} type='video/mp4' />
-        </video>
-      </td>
-      <td>{chapter.remarks}</td>
-      <td>
-        <Link onClick={handleDeleteClick} className="btn btn-danger btn-sm"><i class="bi bi-trash"></i></Link>
-        <Link to={`/editchapter/`+chapter.id}  className="btn btn-info btn-sm ms-1 text-white"><i class="bi bi-pencil-square"></i></Link>
-      </td>
-    </tr>
-  ))}
+              {Array.isArray(chapterData) ? (
+                    chapterData.map((chapter, index) => (
+                      <tr key={chapter.id}>
+                        <td>
+                          <Link to={`/editchapter/${chapter.id}`}>{chapter.title}</Link>
+                        </td>
+                        <td>
+                          <video controls width="250">
+                            <source src={chapter.video.url} type="video/mp4" />
+                          </video>
+                        </td>
+                        <td>{chapter.remarks}</td>
+                        <td>
+                          <Link to={`/editchapter/${chapter.id}`} className="btn btn-sm text-white btn-info">
+                            <i className="bi bi-pencil-square"></i>
+                          </Link>
+                          <button onClick={() => handleDeleteClick(chapter.id)} className="btn btn-danger btn-sm">
+                            <i className="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4">No chapters available.</td>
+                    </tr>
+                  )}
+
 </tbody>
 
                             </table>
