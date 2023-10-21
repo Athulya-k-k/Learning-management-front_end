@@ -1,8 +1,27 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
+
+const baseUrl = "http://localhost:8000/api";
 function CourseDetail() {
+  const [courseData, setCourseData] = useState([]);
+  const [chapterData, setChapterData] = useState([]);
   let { course_id } = useParams();
+  useEffect(() => {
+    axios.get(baseUrl + '/course/' + course_id)
+      .then((response) => {
+        console.log(response.data); 
+        setCourseData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching course data:", error);
+      });
+  }, [course_id]);
+  
+  
+
   return (
     <div className="container mt-3">
       <div className="row">
@@ -10,23 +29,19 @@ function CourseDetail() {
           <img src="/logo512.png" className="img-thumbnail" alt=".." />
         </div>
         <div className="col-8">
-          <h3>Course Title</h3>
+          <h3>{courseData.title}</h3>
           <p>
-            Using a combination of grid and utility classes, cards can be made
-            horizontal in a mobile-friendly and responsive way. In the example
-            below, we remove the grid gutters with .g-0 and use .col-md-*
-            classes to make the card horizontal at the md breakpoint. Further
-            adjustments may be needed depending on your card content.
+            {courseData.description}
           </p>
           <p className="fw-bold">
-            Course By: <Link to="/teacherdetail/1">Teacher1</Link>
+            Course By: <Link to="/teacherdetail/1">hh</Link>
           </p>
           <p className="fw-bold">Duration: 3 hours 30 mins</p>
           <p className="fw-bold">Total Enrolled: 30 students</p>
           <p className="fw-bold">Rating: 4/5</p>
         </div>
       </div>
-      {/* course videos */}
+    
       <div className="card mt-4">
         <div className="card-header">
           <h3>Course Videos</h3>
@@ -84,7 +99,7 @@ function CourseDetail() {
               </button>
             </span>
           </li>
-          {/* Other video items go here */}
+        
         </ul>
       </div>
 
@@ -140,11 +155,9 @@ function CourseDetail() {
             </div>
           </div>
 
-          {/* Include the second card within the same col-md-3 */}
-
           <div className="col-md-3">
             <div className="card">
-              <Link to="/detail/2"> {/* Update the link to the appropriate URL */}
+              <Link to="/detail/2"> 
                 <img
                   src="/logo512.png"
                   className="card-img-top"
@@ -154,7 +167,7 @@ function CourseDetail() {
             </div>
             <div className="card-body">
               <h5 className="card-title">
-                <Link to="/detail/2">Course title</Link> {/* Update the link to the appropriate URL */}
+                <Link to="/detail/2">Course title</Link> 
               </h5>
             </div>
           </div>
