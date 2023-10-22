@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-
+const siteUrl = "http://localhost:8000/";
 const baseUrl = "http://localhost:8000/api";
 function CourseDetail() {
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [chapterData, setChapterData] = useState([]);
+  const [relatedcourseData, setRelatedCourseData] = useState([]);
   let { course_id } = useParams();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ function CourseDetail() {
         setCourseData(response.data);
         setTeacherData(response.data.teacher);
         setChapterData(response.data.course_chapters)
+        setRelatedCourseData(JSON.parse(response.data.related_videos))
       })
       .catch((error) => {
         console.error("Error fetching course data:", error);
@@ -26,6 +28,7 @@ function CourseDetail() {
   }, [course_id]);
 
   console.log(courseData);
+  console.log(relatedcourseData);
   
   
 
@@ -43,6 +46,7 @@ function CourseDetail() {
           <p className="fw-bold">
             Course By: <Link to="/teacherdetail/1">{teacherData.fullname}</Link>
           </p>
+          <p className="fw-bold">Techs:{courseData.techs}</p>
           <p className="fw-bold">Duration: 3 hours 30 mins</p>
           <p className="fw-bold">Total Enrolled: 30 students</p>
           <p className="fw-bold">Rating: 4/5</p>
@@ -51,7 +55,7 @@ function CourseDetail() {
     
       <div className="card mt-4">
         <div className="card-header">
-          <h3>Course Videos</h3>
+          <h5>In this Course</h5>
         </div>
         <ul className="list-group list-group-flush">
           {chapterData.map((chapter,index)=>
@@ -111,39 +115,24 @@ function CourseDetail() {
       <div className="container mt-5">
         <h3 className="pb-1 mb-4">Related Courses</h3>
         <div className="row mb-4">
+        {relatedcourseData.map((rcourse,index)=>
           <div className="col-md-3">
             <div className="card">
-              <Link to="/detail/1">
+              <Link target="__blank" to={`/detail/${rcourse.pk}`}>
                 <img
-                  src="/logo512.png"
+                  src={`${siteUrl}media/${rcourse.fields.featured_img}`}
                   className="card-img-top"
-                  alt="Course 1"
+                  alt={rcourse.fields.title}
                 />
               </Link>
             </div>
             <div className="card-body">
               <h5 className="card-title">
-                <Link to="/detail/1">Course title</Link>
+                <Link to={`/detail/${rcourse.pk}`}>{rcourse.fields.title}</Link>
               </h5>
             </div>
           </div>
-
-          <div className="col-md-3">
-            <div className="card">
-              <Link to="/detail/2"> 
-                <img
-                  src="/logo512.png"
-                  className="card-img-top"
-                  alt="Course 2"
-                />
-              </Link>
-            </div>
-            <div className="card-body">
-              <h5 className="card-title">
-                <Link to="/detail/2">Course title</Link> 
-              </h5>
-            </div>
-          </div>
+        )}
         </div>
       </div>
     </div>
