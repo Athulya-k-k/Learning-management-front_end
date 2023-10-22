@@ -7,18 +7,25 @@ import { useState, useEffect } from "react";
 const baseUrl = "http://localhost:8000/api";
 function CourseDetail() {
   const [courseData, setCourseData] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
   const [chapterData, setChapterData] = useState([]);
   let { course_id } = useParams();
+
   useEffect(() => {
-    axios.get(baseUrl + '/course/' + course_id)
+    axios
+      .get(baseUrl + '/course/' + course_id+'/')
       .then((response) => {
-        console.log(response.data); 
+        console.log(response.data); // Log the course data
         setCourseData(response.data);
+        setTeacherData(response.data.teacher);
+        setChapterData(response.data.course_chapters)
       })
       .catch((error) => {
         console.error("Error fetching course data:", error);
       });
   }, [course_id]);
+
+  console.log(courseData);
   
   
 
@@ -26,7 +33,7 @@ function CourseDetail() {
     <div className="container mt-3">
       <div className="row">
         <div className="col-4">
-          <img src="/logo512.png" className="img-thumbnail" alt=".." />
+          <img src={courseData.featured_img} className="img-thumbnail" alt={courseData.title} />
         </div>
         <div className="col-8">
           <h3>{courseData.title}</h3>
@@ -34,7 +41,7 @@ function CourseDetail() {
             {courseData.description}
           </p>
           <p className="fw-bold">
-            Course By: <Link to="/teacherdetail/1">hh</Link>
+            Course By: <Link to="/teacherdetail/1">{teacherData.fullname}</Link>
           </p>
           <p className="fw-bold">Duration: 3 hours 30 mins</p>
           <p className="fw-bold">Total Enrolled: 30 students</p>
@@ -47,8 +54,9 @@ function CourseDetail() {
           <h3>Course Videos</h3>
         </div>
         <ul className="list-group list-group-flush">
+          {chapterData.map((chapter,index)=>
           <li className="list-group-item">
-            intro{" "}
+            {chapter.title}
             <span className="float-end">
               <span className="me-5">1 hour 30 mins</span>
               <button
@@ -60,45 +68,8 @@ function CourseDetail() {
               </button>
             </span>
           </li>
-          <li className="list-group-item">
-            intro{" "}
-            <span className="float-end">
-              <span className="me-5">1 hour 30 mins</span>
-              <button
-                className="btn btn-sm btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#videoModal1" 
-              >
-                <i className="bi-youtube"></i>
-              </button>
-            </span>
-          </li>
-          <li className="list-group-item">
-            intro{" "}
-            <span className="float-end">
-              <span className="me-5">1 hour 30 mins</span>
-              <button
-                className="btn btn-sm btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#videoModal1" 
-              >
-                <i className="bi-youtube"></i>
-              </button>
-            </span>
-          </li>
-          <li className="list-group-item">
-            intro{" "}
-            <span className="float-end">
-              <span className="me-5">1 hour 30 mins</span>
-              <button
-                className="btn btn-sm btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#videoModal1" 
-              >
-                <i className="bi-youtube"></i>
-              </button>
-            </span>
-          </li>
+        )}
+         
         
         </ul>
       </div>
@@ -126,7 +97,9 @@ function CourseDetail() {
               ></button>
             </div>
             <div className="modal-body"><div className="ratio ratio-16x9">
-  <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" title="YouTube video" allowfullscreen></iframe>
+            {chapterData.map((chapter,index)=>
+  <iframe src={chapter.video} title={chapter.title} allowfullscreen></iframe>
+            )}
 </div></div>
             <div className="modal-footer">
              
