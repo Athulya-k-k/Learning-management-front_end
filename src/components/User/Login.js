@@ -45,8 +45,7 @@ function Login(){
     
       const studentLoginStatus = localStorage.getItem('studentLoginStatus');
       if (studentLoginStatus === 'true') {
-        // Redirect to the home page or take appropriate action
-        // You might want to replace the window.location.href line with a React Router redirection.
+     
         window.location.href = '/userdashboard';
       }
       

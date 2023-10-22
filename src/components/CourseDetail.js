@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const siteUrl = "http://localhost:8000/";
 const baseUrl = "http://localhost:8000/api";
@@ -11,13 +12,16 @@ function CourseDetail() {
   const [chapterData, setChapterData] = useState([]);
   const [relatedcourseData, setRelatedCourseData] = useState([]);
   const [techlistData, setTechListData] = useState([]);
+  const [userLoginStatus,setUserLoginStatus]=useState([])
+  const [enrollstatus,setEnrollStatus]=useState([])
   let { course_id } = useParams();  
+  const studentId=localStorage.getItem('studentId')
 
   useEffect(() => {
     axios
       .get(baseUrl + '/course/' + course_id+'/')
       .then((response) => {
-        console.log(response.data); // Log the course data
+        console.log(response.data); 
         setCourseData(response.data);
         setTeacherData(response.data.teacher);
         setChapterData(response.data.course_chapters)
@@ -27,12 +31,71 @@ function CourseDetail() {
       .catch((error) => {
         console.error("Error fetching course data:", error);
       });
+
+      axios
+      .get(baseUrl + `/fetch-enroll-status/` + studentId+'/'+course_id)
+      .then((response) => {
+       if(response.data.bool==true){
+
+        setEnrollStatus('success')
+       }
+       
+        
+      })
+      .catch((error) => {
+        console.error("Error fetching course data:", error);
+      });
+
+
+      const studentLoginStatus = localStorage.getItem('studentLoginStatus');
+      if (studentLoginStatus === 'true') {
+     
+       setUserLoginStatus('success')
+      }
+      
   }, []);
 
   console.log(courseData);
   console.log(relatedcourseData);
   
+  const EnrollCourse=()=>{
+    const student_id=localStorage.getItem('studentId')
+      const formData = new FormData();
+      formData.append("course", course_id);
+      formData.append("student",student_id); // You may need to replace this with the actual teacher ID.
+    
+      axios
+        .post(baseUrl + "/student-enroll-course/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+           if(res.status===200||res.status===201){
+            Swal.fire({
+              title:'You have successfully enrolled',
+              icon:'success',
+              toast:true,
+              timer:3000,
+              position:'top-right',
+              timerProgressBar:'true',
+              showConfirmButton:false
+            })
+           setEnrollStatus('success')
+           }
+        })
+        .catch((error) => {
+          
+          console.error(error);
   
+        
+          if (error.response) {
+            console.log(error.response.data);
+          }
+        });
+   
+  
+      }
 
   return (
     <div className="container mt-3">
@@ -57,6 +120,17 @@ function CourseDetail() {
           </p>
           <p className="fw-bold">Total Enrolled: 30 students</p>
           <p className="fw-bold">Rating: 4/5</p>
+          
+          {enrollstatus === 'success'&& userLoginStatus == 'success' && 
+          <p ><span>Already enrolled</span></p>
+        }
+          {userLoginStatus === 'success'&& enrollstatus!=='success'&&
+          <p ><button onClick={EnrollCourse}type="button" className="btn btn-success">Enroll Now</button>
+          </p> 
+}
+          {userLoginStatus !== 'success' &&
+          <p ><Link to='/userlogin'>please login</Link></p>
+          }
         </div>
       </div>
     

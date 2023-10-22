@@ -43,6 +43,7 @@ function AddCourses() {
   };
 
   const formSubmit = () => {
+    const teacher_id=localStorage.getItem('teacherId')
     const formData = new FormData();
 
     formData.append("category", courseData.category);
