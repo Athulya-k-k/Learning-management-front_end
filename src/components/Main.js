@@ -30,6 +30,7 @@ import AddChapter from "./Teacher/AddChapter";
 import CourseChapter from "./Teacher/CourseChapter";
 import EditChapter from "./Teacher/EditChapter";
 import EditCourse from "./Teacher/EditCourse";
+import TeacherSkillCourses from "./Teacher/TeacherSkillCourses";
 
 function Main() {
   return (
@@ -66,6 +67,7 @@ function Main() {
         <Route path="/category/:category_slug" element={<CategoryCourses />} />
         <Route path="/editchapter/:chapter_id" element={<EditChapter />} />
         <Route path="/editcourse/:course_id" element={<EditCourse />} />
+        <Route path="/teacherskillcourses/:skill_name/:teacher_id" element={<TeacherSkillCourses/>} />
       </Routes>
       <Footer />
     </div>

@@ -11,7 +11,7 @@ function CourseDetail() {
   const [chapterData, setChapterData] = useState([]);
   const [relatedcourseData, setRelatedCourseData] = useState([]);
   const [techlistData, setTechListData] = useState([]);
-  let { course_id } = useParams();
+  let { course_id } = useParams();  
 
   useEffect(() => {
     axios
@@ -48,9 +48,11 @@ function CourseDetail() {
           <p className="fw-bold">
             Course By: <Link to={`/teacherdetail/${teacherData.id}`}>{teacherData.fullname}</Link>
           </p>
-          <p className="fw-bold">Techs:
+          <p className="fw-bold">Techs:&nbsp;
           {techlistData.map((tech,index)=>
-          <Link to={`/category/${tech.trim()}`} className="badge bg-warning ml-2">{tech}</Link>
+          <>
+          <Link to={`/category/${tech.trim()}`} className="badge bg-warning ml-2">{tech.trim()}</Link>&nbsp;
+          </>
           )}
           </p>
           <p className="fw-bold">Total Enrolled: 30 students</p>

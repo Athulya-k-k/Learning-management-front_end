@@ -8,6 +8,7 @@ const baseUrl = "http://localhost:8000/api";
 function TeacherDetail() {
     const [courseData, setCourseData] = useState([]);
     const [teacherData, setTeacherData] = useState([]);
+    const [skillslist,setskillsListData]=useState([]);
     let { teacher_id } = useParams();
     useEffect(() => {
         axios
@@ -16,6 +17,7 @@ function TeacherDetail() {
             console.log(response.data); // Log the course data
             setCourseData(response.data.teacher_courses);
             setTeacherData(response.data);
+            setskillsListData(response.data.skill_list);
           })
           .catch((error) => {
             console.error("Error fetching course data:", error);
@@ -31,7 +33,14 @@ function TeacherDetail() {
         <div className="col-8">
             <h3>{teacherData.fullname}</h3>
             <p>{teacherData.detail}</p>
-            <p className="fw-bold">skills:<Link to="/category/php">php</Link>,<Link to="/category/php">c</Link></p>
+            <p className="fw-bold">skills:&nbsp;
+            
+            {skillslist.map((skill,index)=>
+          <>
+          <Link to={`/teacherskillcourses/${skill.trim()}/${  teacherData.id}`} className="badge bg-warning ml-2">{skill.trim()}</Link>&nbsp;
+          </>
+          )}
+            </p>
             <p className="fw-bold">recent courses:<Link to="/category/php">php</Link></p>
  
             <p className="fw-bold">Rating:4/5</p>
