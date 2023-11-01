@@ -118,7 +118,7 @@ function CourseDetail() {
           </>
           )}
           </p>
-          <p className="fw-bold">Total Enrolled: 30 students</p>
+          <p className="fw-bold">Total Enrolled:{courseData.total_enroll_students} student(s)</p>
           <p className="fw-bold">Rating: 4/5</p>
           
           {enrollstatus === 'success'&& userLoginStatus == 'success' && 

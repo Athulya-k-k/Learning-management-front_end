@@ -57,7 +57,7 @@ function TeacherCourses() {
                         ></img>
                       </td>
                       <td>
-                        <Link to="#">22</Link>
+                        <Link to={`/enrolled-students/`+course.id}>{course.total_enrolled_students}</Link>
                       </td>
                       <td>
                         <Link

@@ -32,6 +32,7 @@ import EditChapter from "./Teacher/EditChapter";
 import EditCourse from "./Teacher/EditCourse";
 import TeacherSkillCourses from "./Teacher/TeacherSkillCourses";
 import Logout from "./User/Logout";
+import EnrolledStudents from "./Teacher/EnrolledStudents";
 
 function Main() {
   return (
@@ -70,6 +71,7 @@ function Main() {
         <Route path="/editcourse/:course_id" element={<EditCourse />} />
         <Route path="/teacherskillcourses/:skill_name/:teacher_id" element={<TeacherSkillCourses/>} />
         <Route path="/userlogout" element={<Logout />} />
+        <Route path="/enrolled-students/:course_id" element={<EnrolledStudents />} />
       </Routes>
       <Footer />
     </div>
