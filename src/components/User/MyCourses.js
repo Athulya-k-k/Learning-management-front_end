@@ -1,7 +1,27 @@
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+const baseUrl = "http://localhost:8000/api";
 
 function MyCourses(){
+    const [courseData, setCourseData] = useState([]);
+    const studentId = localStorage.getItem("studentId");
+
+    useEffect(() => {
+        try {
+          axios
+            .get(baseUrl + "/fetch-enrolled-courses/"+studentId+'/' )
+            .then((res) => {
+              setCourseData(res.data);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }, []);
+      console.log(courseData);
+
     return(
         <div className="container mt-4">
             <div className="row">
@@ -19,13 +39,18 @@ function MyCourses(){
                                     <tr>
                                         <th>Name</th>
                                         <th>Created by</th>
-                                        <th>Action</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>php</td>
-                                    <td><Link to='#'>athulya</Link></td>
-                                    <td><button className="btn btn-danger btn-sm active">delete</button></td>
+                                {courseData.map((row, index) => 
+                                    <tr>
+                                    <td>  <Link to={`/detail/${row.course.id}/`}>{row.course.title}</Link></td>
+                                    <td><Link to='#'>{row.course.teacher.fullname}</Link></td>
+                                   
+                                   
+                                    </tr>
+                                )}
                                 </tbody>
                             </table>
                         </div> 
