@@ -15,7 +15,7 @@ function TeacherSidebar(){
         <Link to="/myusers" className="list-group-item list-group=item-action">My users</Link>
         <Link to="/teacherprofile" className="list-group-item list-group=item-action">profile setting</Link>
         <Link to="/teacherchangepass" className="list-group-item list-group=item-action">Change password</Link>
-        <Link to="/teacherlogin" className="list-group-item list-group=item-action text-danger">Logout</Link>
+        <Link to="/teacherlogout" className="list-group-item list-group=item-action text-danger">Logout</Link>
         </div>
     </div>
        )

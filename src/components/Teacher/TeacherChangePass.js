@@ -1,10 +1,81 @@
 import { Link } from "react-router-dom";
 import TeacherSidebar from "./TeacherSidebar";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+
+const baseUrl = "http://127.0.0.1:8000/api";
 
 
 
 
 function TeacherChangePass(){
+    const[teacherData,setTeacherData]=useState({
+        'password':''
+       
+        
+    });
+    const teacherId = localStorage.getItem("teacherId");
+
+    const handlechange=(event)=>{
+        setTeacherData({
+            ...teacherData,
+            [event.target.name]:event.target.value
+        })
+    
+    }
+    
+    const submitForm = (event) => {
+        event.preventDefault(); // Prevent the default form submission and page refresh
+      
+        const teacherFormData = new FormData();
+        teacherFormData.append('password', teacherData.password);
+       
+      
+       
+      
+        try {
+          axios.post(baseUrl + "/teacher/change-password/" + teacherId + '/', teacherFormData).then((response) => {
+            if (response.status === 200) {
+              // Display a success toast
+              Swal.fire({
+                // title: "Success",
+                text: "Data has been updated",
+                icon: "success",
+                toast: true,
+                timer: 3000,
+                position: "top-right",
+                timerProgressBar: true,
+                showConfirmButton: false,
+              });
+      
+              // Reset only the status and specific fields if needed
+              setTeacherData({
+                ...teacherData,
+                status: "",
+                p_img: "", // Optionally clear specific fields
+              });
+            }
+          });
+        } catch (error) {
+          console.log(error);
+      
+          // Display an error toast
+          Swal.fire({
+            title: "Error",
+            text: "Something went wrong. Please try again.",
+            icon: "error",
+            toast: true,
+            timer: 3000,
+            position: "top-right",
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+        }
+      };
+      
+
+
     return(
         <div className="container mt-4">
             <div className="row">
@@ -17,14 +88,13 @@ function TeacherChangePass(){
                         <div className="card-body">
 
                          
-                        <div ClassName="mb-3 row">
-                            <label for="inputPassword" ClassName="col-sm-2 col-form-label">new Password</label>
-                            <div ClassName="col-sm-10">
-                            <input type="password" ClassName="form-control" id="inputPassword"/>
-                            </div>
-                        </div>
+                        <div className="mb-3">
+                        <label for="exampleInputEmail1" className="form-label">New password</label>
+                        <input  type="password" name="password" value={teacherData.password} onChange={handlechange} className="form-control" id="inputPassword"  />
+                       
+                    </div>
                         <hr/>
-                           <buton className="btn btn-primary">Update</buton>
+                           <buton className="btn btn-primary" onClick={submitForm}>Update</buton>
                         
                             </div>
                             </div>

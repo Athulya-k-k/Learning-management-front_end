@@ -21,7 +21,7 @@ function EnrolledStudents() {
       console.log(error);
     }
   }, []);
-  console.log(studentData);
+  // console.log(studentData);
 
   return (
     <div className="container mt-4">

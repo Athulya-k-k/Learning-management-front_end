@@ -1,101 +1,154 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 const siteUrl = "http://localhost:8000/";
 const baseUrl = "http://localhost:8000/api";
+
 function CourseDetail() {
-  const [courseData, setCourseData] = useState([]);
-  const [teacherData, setTeacherData] = useState([]);
+  const [courseData, setCourseData] = useState({});
+  const [teacherData, setTeacherData] = useState({});
   const [chapterData, setChapterData] = useState([]);
   const [relatedcourseData, setRelatedCourseData] = useState([]);
   const [techlistData, setTechListData] = useState([]);
-  const [userLoginStatus,setUserLoginStatus]=useState([])
-  const [enrollstatus,setEnrollStatus]=useState([])
-  let { course_id } = useParams();  
-  const studentId=localStorage.getItem('studentId')
+  const [userLoginStatus, setUserLoginStatus] = useState("not-logged-in");
+  const [enrollstatus, setEnrollStatus] = useState("not-enrolled");
+  const [ratingstatus, setRatingStatus] = useState("not-rated");
+  const [avgrating, setAvgRating] = useState(0);
 
+  const { course_id } = useParams();
+  const studentId = localStorage.getItem("studentId");
+  const studentLoginStatus = localStorage.getItem('studentLoginStatus');
+  console.log(ratingstatus);
+ 
+ 
   useEffect(() => {
+    // Fetch course details
     axios
-      .get(baseUrl + '/course/' + course_id+'/')
+      .get(baseUrl + '/course/' + course_id + '/')
       .then((response) => {
-        console.log(response.data); 
-        setCourseData(response.data);
-        setTeacherData(response.data.teacher);
-        setChapterData(response.data.course_chapters)
-        setRelatedCourseData(JSON.parse(response.data.related_videos))
-        setTechListData(response.data.tech_list)
+        const data = response.data;
+        setCourseData(data);
+        setTeacherData(data.teacher);
+        setChapterData(data.course_chapters);
+        setRelatedCourseData(JSON.parse(data.related_videos));
+        setTechListData(data.tech_list);
+        if (response.data.course_rating !== null) {
+          setAvgRating(response.data.course_rating);
+        }
       })
       .catch((error) => {
         console.error("Error fetching course data:", error);
       });
 
-      axios
-      .get(baseUrl + `/fetch-enroll-status/` + studentId+'/'+course_id)
+    // Check enrollment status
+    axios
+      .get(baseUrl + `/fetch-enroll-status/` + studentId + '/' + course_id)
       .then((response) => {
-       if(response.data.bool==true){
-
-        setEnrollStatus('success')
-       }
-       
-        
+        if (response.data.bool === true) {
+          setEnrollStatus("enrolled");
+        } else {
+          setEnrollStatus("not-enrolled");
+        }
       })
       .catch((error) => {
-        console.error("Error fetching course data:", error);
+        console.error("Error fetching enroll status:", error);
       });
 
+    // Check rating status
+    axios
+      .get(baseUrl + `/fetch-rating-status/` + studentId + '/' + course_id)
+      .then((response) => {
+        if (response.data.bool === true) {
+          setRatingStatus("rated");
+        } else {
+          setRatingStatus("not-rated");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching rating status:", error);
+      });
 
-      const studentLoginStatus = localStorage.getItem('studentLoginStatus');
-      if (studentLoginStatus === 'true') {
-     
-       setUserLoginStatus('success')
-      }
-      
-  }, []);
+    const studentLoginStatus = localStorage.getItem('studentLoginStatus');
+    if (studentLoginStatus === 'true') {
+      setUserLoginStatus('logged-in');
+    }
+  }, [course_id, studentId]);
 
-  console.log(courseData);
-  console.log(relatedcourseData);
-  
-  const EnrollCourse=()=>{
-    const student_id=localStorage.getItem('studentId')
-      const formData = new FormData();
-      formData.append("course", course_id);
-      formData.append("student",student_id); // You may need to replace this with the actual teacher ID.
-    
-      axios
-        .post(baseUrl + "/student-enroll-course/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-           if(res.status===200||res.status===201){
-            Swal.fire({
-              title:'You have successfully enrolled',
-              icon:'success',
-              toast:true,
-              timer:3000,
-              position:'top-right',
-              timerProgressBar:'true',
-              showConfirmButton:false
-            })
-           setEnrollStatus('success')
-           }
-        })
-        .catch((error) => {
-          
-          console.error(error);
-  
-        
-          if (error.response) {
-            console.log(error.response.data);
-          }
-        });
-   
-  
-      }
+  const EnrollCourse = () => {
+    const student_id = localStorage.getItem('studentId');
+    const formData = new FormData();
+    formData.append("course", course_id);
+    formData.append("student", student_id);
+
+    axios
+      .post(baseUrl + "/student-enroll-course/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Swal.fire({
+            title: 'You have successfully enrolled',
+            icon: 'success',
+            toast: true,
+            timer: 3000,
+            position: 'top-right',
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          setEnrollStatus('enrolled');
+        }
+      })
+      .catch((error) => {
+        console.error("Error enrolling in the course:", error);
+        if (error.response) {
+          console.log(error.response.data);
+        }
+      });
+  };
+
+  // Add rating
+  const [ratingData, setRatingData] = useState({
+    rating: "",
+    reviews: "",
+  });
+
+  const handleChange = (event) => {
+    setRatingData({
+      ...ratingData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const formSubmit = () => {
+    const formData = new FormData();
+    formData.append("course", course_id);
+    formData.append("student", studentId);
+    formData.append("rating", ratingData.rating);
+    formData.append("reviews", ratingData.reviews);
+
+    axios.post(baseUrl + "/course-rating/", formData)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Swal.fire({
+            title: 'Rating added',
+            icon: 'success',
+            toast: true,
+            timer: 5000,
+            position: 'top-right',
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          setRatingStatus("rated");
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting the rating:", error);
+      });
+  };
 
   return (
     <div className="container mt-3">
@@ -118,17 +171,64 @@ function CourseDetail() {
           </>
           )}
           </p>
-          <p className="fw-bold">Total Enrolled:{courseData.total_enroll_students} student(s)</p>
-          <p className="fw-bold">Rating: 4/5</p>
-          
+          <p className="fw-bold">Total Enrolled:{courseData.total_enrolled_students} student(s)</p>
+          <p className="fw-bold">Rating:{avgrating}/5
           {enrollstatus === 'success'&& userLoginStatus == 'success' && 
-          <p ><span>Already enrolled</span></p>
+          <>
+         { ratingstatus!='rated' &&
+         <button className="btn btn-success btn-sm ms-2" data-bs-toggle='modal' data-bs-target='#ratingModal'>Rating</button>
+          }
+         { ratingstatus =='rated' &&
+         <small className="text-warning  ms-2  ">already rated</small>
+          }
+          
+         <div className="modal fade" id='ratingModal' tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Rate for {courseData.title}</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+              <form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Rating</label>
+   <select onChange={handleChange} className="form-control" name="rating">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+   </select>
+   
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Review</label>
+    <textarea onChange={handleChange} className="form-control" name="review"></textarea>
+  </div>
+  
+  <button type="button" onClick={formSubmit} class="btn btn-primary">Submit</button>
+</form>
+              </div>
+            
+            </div>
+          </div>
+         </div>
+</>
+          
         }
-          {userLoginStatus === 'success'&& enrollstatus!=='success'&&
+          
+          </p>
+          
+            
+          {enrollstatus === 'enrolled' && studentLoginStatus === 'true' && (
+  <p><span>Already enrolled</span></p>
+)}   
+          {studentLoginStatus === 'true'&& enrollstatus!=='enrolled'&&
           <p ><button onClick={EnrollCourse}type="button" className="btn btn-success">Enroll Now</button>
           </p> 
 }
-          {userLoginStatus !== 'success' &&
+          {studentLoginStatus!== 'true' &&
           <p ><Link to='/userlogin'>please login</Link></p>
           }
         </div>
