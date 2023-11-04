@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import 'font-awesome/css/font-awesome.min.css';
 
 const siteUrl = "http://localhost:8000/";
 const baseUrl = "http://localhost:8000/api";
@@ -16,13 +17,12 @@ function CourseDetail() {
   const [enrollstatus, setEnrollStatus] = useState("not-enrolled");
   const [ratingstatus, setRatingStatus] = useState("not-rated");
   const [avgrating, setAvgRating] = useState(0);
+  const [favstatus, setFavStatus] = useState(0);
 
   const { course_id } = useParams();
   const studentId = localStorage.getItem("studentId");
   const studentLoginStatus = localStorage.getItem('studentLoginStatus');
-  console.log(ratingstatus);
- 
- 
+
   useEffect(() => {
     // Fetch course details
     axios
@@ -70,11 +70,23 @@ function CourseDetail() {
         console.error("Error fetching rating status:", error);
       });
 
-    const studentLoginStatus = localStorage.getItem('studentLoginStatus');
+    axios
+      .get(baseUrl + `/fetch-favorite-status/` + studentId + '/' + course_id)
+      .then((response) => {
+        if (response.data.bool === true) {
+          setFavStatus("success");
+        } else {
+          setFavStatus("");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching favorite status:", error);
+      });
+
     if (studentLoginStatus === 'true') {
       setUserLoginStatus('logged-in');
     }
-  }, [course_id, studentId]);
+  }, [course_id, studentId, studentLoginStatus]);
 
   const EnrollCourse = () => {
     const student_id = localStorage.getItem('studentId');
@@ -107,6 +119,63 @@ function CourseDetail() {
         if (error.response) {
           console.log(error.response.data);
         }
+      });
+  };
+
+  const MarkasFav = () => {
+    const formData = new FormData();
+    formData.append('course', course_id);
+    formData.append('student', studentId);
+    formData.append('status', true);
+
+    axios.post(baseUrl + "/student-add-favorite-course/", formData)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Swal.fire({
+            title: 'Fav added',
+            icon: 'success',
+            toast: true,
+            timer: 5000,
+            position: 'top-right',
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          setFavStatus("success");
+        }
+      })
+      .catch((error) => {
+        console.error("Error adding to favorites:", error);
+      });
+  };
+
+  const removeFav = () => {
+    const formData = new FormData();
+    formData.append('course', course_id);
+    formData.append('student', studentId);
+    formData.append('status', false);
+
+    axios
+      .post(baseUrl + "/student-remove-favorite-course/" + course_id + '/' + studentId, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Swal.fire({
+            title: 'Fav removed',
+            icon: 'success',
+            toast: true,
+            timer: 5000,
+            position: 'top-right',
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          setFavStatus("true");
+        }
+      })
+      .catch((error) => {
+        console.error("Error removing from favorites:", error);
       });
   };
 
@@ -149,7 +218,6 @@ function CourseDetail() {
         console.error("Error submitting the rating:", error);
       });
   };
-
   return (
     <div className="container mt-3">
       <div className="row">
@@ -227,6 +295,14 @@ function CourseDetail() {
           {studentLoginStatus === 'true'&& enrollstatus!=='enrolled'&&
           <p ><button onClick={EnrollCourse}type="button" className="btn btn-success">Enroll Now</button>
           </p> 
+}
+          {studentLoginStatus === 'true'&& favstatus !=="success" &&
+         <p ><button onClick={MarkasFav} title="add to favourite" type="button" className="btn  btn-outline-danger"><i className="bi bi-heart-fill"></i></button>
+          </p>
+}
+          {studentLoginStatus === 'true'&& favstatus ==="success" &&
+         <p ><button onClick={removeFav} title="remove to favourite" type="button" className="btn  btn-outline-danger"><i className="bi bi-heart-fill"></i></button>
+          </p>
 }
           {studentLoginStatus!== 'true' &&
           <p ><Link to='/userlogin'>please login</Link></p>
