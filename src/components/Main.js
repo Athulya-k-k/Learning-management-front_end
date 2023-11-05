@@ -35,6 +35,7 @@ import Logout from "./User/Logout";
 import EnrolledStudents from "./Teacher/EnrolledStudents";
 import AddAssignment from "./Teacher/AddAssignment";
 import ShowAssignment from "./Teacher/ShowAssignment";
+import StudentAssignments from "./User/StudentAssignments";
 
 function Main() {
   return (
@@ -76,6 +77,7 @@ function Main() {
         <Route path="/enrolled-students/:course_id" element={<EnrolledStudents />} />
         <Route path="/add-assignment/:student_id/:teacher_id" element={<AddAssignment />} />
         <Route path="/show-assignment/:student_id/:teacher_id" element={<ShowAssignment />} />
+        <Route path="/my-assignments/" element={<StudentAssignments />} />
       </Routes>
       <Footer />
     </div>

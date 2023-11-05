@@ -12,6 +12,7 @@ function Sidebar(){
         <Link to="/mycourses" className="list-group-item list-group=item-action">My courses</Link>
         <Link to="/favcourses" className="list-group-item list-group=item-action">Favourite courses</Link>
         <Link to="/reccourses" className="list-group-item list-group=item-action">Recommended courses</Link>
+        <Link to="/my-assignments" className="list-group-item list-group=item-action"> Assignments</Link>
         <Link to="/profile" className="list-group-item list-group=item-action">profile setting</Link>
         <Link to="/changepass" className="list-group-item list-group=item-action">Change password</Link>
         <Link to="/userlogin" className="list-group-item list-group=item-action text-danger">Logout</Link>
