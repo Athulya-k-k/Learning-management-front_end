@@ -33,6 +33,8 @@ import EditCourse from "./Teacher/EditCourse";
 import TeacherSkillCourses from "./Teacher/TeacherSkillCourses";
 import Logout from "./User/Logout";
 import EnrolledStudents from "./Teacher/EnrolledStudents";
+import AddAssignment from "./Teacher/AddAssignment";
+import ShowAssignment from "./Teacher/ShowAssignment";
 
 function Main() {
   return (
@@ -72,6 +74,8 @@ function Main() {
         <Route path="/teacherskillcourses/:skill_name/:teacher_id" element={<TeacherSkillCourses/>} />
         <Route path="/userlogout" element={<Logout />} />
         <Route path="/enrolled-students/:course_id" element={<EnrolledStudents />} />
+        <Route path="/add-assignment/:student_id/:teacher_id" element={<AddAssignment />} />
+        <Route path="/add-assignment/:student_id/:teacher_id" element={<ShowAssignment />} />
       </Routes>
       <Footer />
     </div>

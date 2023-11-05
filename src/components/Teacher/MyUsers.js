@@ -38,6 +38,7 @@ function UserList() {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Username</th>
+                    <th>Assignment</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -50,14 +51,12 @@ function UserList() {
                       </td>
                       <td>{row.student.email}</td>
                       <td>{row.student.username}</td>
+                      <td>
+                        <Link to="/" className="btn btn-sm btn-warning ms-2 ">Assignments</Link>
+                        <Link to={`/add-assignment/${row.student.id}/${teacherId}`} className="btn btn-sm btn-success ms-2 "> Add Assignments</Link>
+                      </td>
 
                 
-                      <td>
-                        <Link className="btn btn-info btn-sm " to={`/view-student/`+row.student.id}
-                        >
-                          View
-                        </Link>
-                      </td>
                     </tr>
                   )}
                 </tbody>
