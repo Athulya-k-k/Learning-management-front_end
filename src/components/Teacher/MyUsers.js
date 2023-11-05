@@ -52,7 +52,7 @@ function UserList() {
                       <td>{row.student.email}</td>
                       <td>{row.student.username}</td>
                       <td>
-                        <Link to="/" className="btn btn-sm btn-warning ms-2 ">Assignments</Link>
+                        <Link to={`/show-assignment/${row.student.id}/${teacherId}`} className="btn btn-sm btn-warning ms-2 ">Assignments</Link>
                         <Link to={`/add-assignment/${row.student.id}/${teacherId}`} className="btn btn-sm btn-success ms-2 "> Add Assignments</Link>
                       </td>
 

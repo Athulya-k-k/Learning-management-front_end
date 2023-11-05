@@ -75,7 +75,7 @@ function Main() {
         <Route path="/userlogout" element={<Logout />} />
         <Route path="/enrolled-students/:course_id" element={<EnrolledStudents />} />
         <Route path="/add-assignment/:student_id/:teacher_id" element={<AddAssignment />} />
-        <Route path="/add-assignment/:student_id/:teacher_id" element={<ShowAssignment />} />
+        <Route path="/show-assignment/:student_id/:teacher_id" element={<ShowAssignment />} />
       </Routes>
       <Footer />
     </div>
