@@ -12,7 +12,7 @@ function RecCourses(){
     useEffect(() => {
         try {
           axios
-            .get(baseUrl + "/fetch-recommended-courses/"+studentId )
+            .get(baseUrl + "/fetch-recommended-courses/"+studentId+'/' )
             .then((res) => {
               setCourseData(res.data);
             });

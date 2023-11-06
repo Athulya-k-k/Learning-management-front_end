@@ -12,7 +12,7 @@ function FavCourses(){
     useEffect(() => {
         try {
           axios
-            .get(baseUrl + "/fetch-favorite-courses/"+studentId+'/' )
+            .get(baseUrl + "/fetch-favorite-courses/"+studentId )
             .then((res) => {
               setCourseData(res.data);
             });

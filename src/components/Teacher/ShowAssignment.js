@@ -82,6 +82,7 @@ function ShowAssignment() {
                 <thead>
                   <tr>
                     <th>Tiltle</th>
+                    <th>Status</th>
                     
                   </tr>
                 </thead>
@@ -91,9 +92,17 @@ function ShowAssignment() {
                       <tr> 
                         <td>
                           
-                            {assignment.title}
+                            {assignment.title}</td>
+                            <td>
+                            {assignment.student_status==false &&
+                                         <span className="badge bg-warning">Pending</span>
+                                        }
+
+                                        {assignment.student_status==true &&
+                                        <span className="badge bg-success">completed</span>
+                                        }
                          
-                        </td>
+                         </td>
                        
                     
                       
