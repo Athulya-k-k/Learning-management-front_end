@@ -15,7 +15,7 @@ function Sidebar(){
         <Link to="/my-assignments" className="list-group-item list-group=item-action"> Assignments</Link>
         <Link to="/profile" className="list-group-item list-group=item-action">profile setting</Link>
         <Link to="/changepass" className="list-group-item list-group=item-action">Change password</Link>
-        <Link to="/userlogin" className="list-group-item list-group=item-action text-danger">Logout</Link>
+        <Link to="/userlogout" className="list-group-item list-group=item-action text-danger">Logout</Link>
         </div>
     </div>
        )
