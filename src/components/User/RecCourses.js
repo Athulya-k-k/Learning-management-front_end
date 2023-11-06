@@ -20,7 +20,7 @@ function RecCourses(){
           console.log(error);
         }
       }, []);
-      console.log(courseData);
+    //   console.log(courseData);
 
     return(
         <div className="container mt-4">

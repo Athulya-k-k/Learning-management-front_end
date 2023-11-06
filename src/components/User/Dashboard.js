@@ -16,7 +16,7 @@ function Dashboard(){
         try{
             axios.get(baseUrl+'/student/dashboard/'+studentId+'/')
             .then((res)=>{
-                console.log(res);
+                // console.log(res);
                 setDashboardData(res.data)
             })
         }catch(error){

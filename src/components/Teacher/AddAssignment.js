@@ -57,6 +57,28 @@ function AddAssignment() {
           console.log(error.response.data);
         }
       });
+
+    
+          const notifyData = new FormData();
+         
+          notifyData.append("notify_subject", 'assignment');
+          notifyData.append("notify_for", 'student');
+          notifyData.append("student", student_id);
+          notifyData.append("stu", student_id);
+          notifyData.append("student", student_id);
+          axios
+          .post(baseUrl + "/save-notification/", notifyData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            console.log('notification added');
+          })
+          window.location.reload();
+        
+          // Do not clear the form data after the toast
+     
   };
 
   return (
