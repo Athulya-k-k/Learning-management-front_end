@@ -6,21 +6,49 @@ import axios from "axios";
 const baseUrl = "http://localhost:8000/api";
 function AllQuiz() {
   const [quizData, setQuizData] = useState([]);
+  const [totalresults, setTotalResults] = useState([]);
 
   const teacherId = localStorage.getItem("teacherId");
-  console.log(teacherId);
 
   useEffect(() => {
+    // Fetch the initial quiz data
     try {
       axios.get(baseUrl + "/teacher-quiz/" + teacherId).then((res) => {
         setQuizData(res.data);
+        setTotalResults(res.data.length);
       });
     } catch (error) {
       console.log(error);
     }
-  }, []);
-  console.log(quizData);
+  }, [teacherId]); // Add teacherId as a dependency
 
+  const Swal = require("sweetalert2");
+  const handleDeleteClick = (quiz_id) => {
+    Swal.fire({
+      title: "Confirm",
+      text: "Are you sure you want to delete this?",
+      icon: "info",
+      confirmButtonText: "Continue",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios.delete(baseUrl + "/quiz/" + quiz_id).then((res) => {
+            // After successful deletion, update the quiz data
+            axios.get(baseUrl + "/teacher-quiz/" + teacherId).then((res) => {
+              setTotalResults(res.data.length);
+              setQuizData(res.data);
+            });
+            Swal.fire("success", "Data has been deleted");
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
+
+ 
   return (
     <div className="container mt-4">
       <div className="row">
@@ -55,7 +83,7 @@ function AllQuiz() {
                       <td>
                         <Link
                           className="btn btn-info btn-sm "
-                          to="#"
+                          to={`/edit-quiz/${quiz.id}`}
                         >
                           Edit
                         </Link>
@@ -65,7 +93,7 @@ function AllQuiz() {
                         >
                           Add question
                         </Link>
-                        <button className="btn btn-danger btn-sm ms-2">
+                        <button onClick={() => handleDeleteClick(quiz.id)} className="btn btn-danger btn-sm ms-2">
                           delete
                         </button>
                       </td>
