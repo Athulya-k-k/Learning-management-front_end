@@ -1,20 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useState, useEffect } from "react";
+import CheckQuizStatusForStudent from "./CheckQuizStatusForStudent";
 import axios from "axios";
 
 const baseUrl = "http://localhost:8000/api";
 
-function MyCourses(){
-    const [courseData, setCourseData] = useState([]);
+function CourseQuizList(){
+    const [quizData, setquizData] = useState([]);
     const studentId = localStorage.getItem("studentId");
+    const {course_id}=useParams()
 
     useEffect(() => {
         try {
           axios
-            .get(baseUrl + "/fetch-enrolled-courses/"+studentId+'/' )
+            .get(baseUrl + '/fetch-assigned-quiz/'+course_id )
             .then((res) => {
-              setCourseData(res.data);
+              setquizData(res.data);
             });
         } catch (error) {
           console.log(error);
@@ -32,27 +34,36 @@ function MyCourses(){
                      
 
                    <div className="card">
-                        <h5 className="card-header">my courses</h5>
+                        <h5 className="card-header">Quiz List</h5>
                         <div className="card-body">
                             <table className="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Created by</th>
                                         <th>Quiz</th>
+                                        
+                                        <th>action</th>
+                                       
                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {courseData.map((row, index) => 
-                                    <tr>
-                                    <td>  <Link to={`/detail/${row.course.id}/`}>{row.course.title}</Link></td>
-                                    <td><Link to={`/teacherdetail/${row.course.teacher.id}/`}>{row.course.teacher.fullname}</Link></td>
-                                    <td> <Link className="btn btn-sm btn-warning" to={`/course-quiz/${row.course.id}/`}>Quiz List</Link></td>
+                                    {quizData.map((row,index)=>
+                                     <tr>
+                                     <td> {row.quiz.title}</td>
+                                     <CheckQuizStatusForStudent quiz={row.id} student={studentId}/>
+                                     </tr>
+                                     
+                                    )}
+                                
+                              
+                                   
+                                 
+                                   
 
                                    
-                                    </tr>
-                                )}
+                                   
+                                   
+                              
                                 </tbody>
                             </table>
                         </div> 
@@ -69,4 +80,4 @@ function MyCourses(){
     )
 
 }
-export default MyCourses;
+export default CourseQuizList;

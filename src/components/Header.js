@@ -1,10 +1,26 @@
 import { Link } from "react-router-dom";
+import { useState,useEffect } from "react";
 
 function Header() {
+  const [searchstring, setsearchstring] = useState({
+    'search':''
+   } );
   const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
   const studentLoginStatus=localStorage.getItem('studentLoginStatus')
 
+  const handleChange = (event) => {
+    setsearchstring({
+      ...searchstring,
+      [event.target.name]: event.target.value,
+    });
+  };
 
+  const searchCourse=()=>{
+    if (searchstring.search!=''){
+      window.location.href='/search/'+searchstring.search
+    }
+   
+  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -23,6 +39,10 @@ function Header() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+        <form class="d-flex" role="search">
+        <input name="search" onChange={handleChange} class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button onClick={searchCourse} class="btn btn-warning" type="button">Search</button>
+      </form>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
@@ -39,16 +59,17 @@ function Header() {
           </ul>
           <ul className="navbar-nav">
           <li className="nav-item dropdown">
-            <a
+            <Link
               className="nav-link dropdown-toggle"
-              href="#"
+              to="#"
               id="navbarDropdown"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
               Teacher
-            </a>
+            </Link>
+         
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               {teacherLoginStatus!='true' &&
               <>
@@ -76,21 +97,22 @@ function Header() {
                 </Link>
               </li>
             </ul>
+          
           </li>
         </ul>
         </div>
         <ul className="navbar-nav">
           <li className="nav-item dropdown">
-            <a
+            <Link
               className="nav-link dropdown-toggle"
-              href="#"
+              to="#"
               id="navbarDropdown"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
               User
-            </a>
+            </Link>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             {studentLoginStatus!='true' &&
             <>

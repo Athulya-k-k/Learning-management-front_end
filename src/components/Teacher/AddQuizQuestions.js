@@ -9,7 +9,7 @@ const baseUrl = "http://127.0.0.1:8000/api";
 function AddQuizQuestions() {
   const [questionData, setquestionData] = useState({
     quiz: "",
-    question: "",
+    questions: "",
     ans1: "",
     ans2: "",
     ans3: "",
@@ -31,7 +31,7 @@ function AddQuizQuestions() {
     const formData = new FormData();
 
     formData.append("quiz", quiz_id); // You may need to replace this with the actual course ID.
-    formData.append("question", questionData.question);
+    formData.append("questions", questionData.questions);
     formData.append("ans1", questionData.ans1);
     formData.append("ans2", questionData.ans2);
     formData.append("ans3", questionData.ans3);
@@ -48,9 +48,9 @@ function AddQuizQuestions() {
       })
      
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) { // Use strict equality (===) here
           const Swal = require("sweetalert2");
-
+      
           Swal.fire({
             title: "Data has been updated",
             icon: "success",
@@ -61,8 +61,9 @@ function AddQuizQuestions() {
             showConfirmButton: false,
           });
         }
-        window.location.reload()
+        window.location.reload();
       })
+      
       .catch((error) => {
         console.error(error);
         if (error.response) {
@@ -84,7 +85,7 @@ function AddQuizQuestions() {
                 <form>
 <div className="mb-3">
     <label for="title" className="form-lable">Title</label>
-    <input type="text" onChange={handleChange} name="title" id="title" className="form-control"/>
+    <input type="text" onChange={handleChange} name="questions" id="questions" className="form-control"/>
 </div>
 <div className="mb-3">
     <label for="title" className="form-lable">Ans 1</label>

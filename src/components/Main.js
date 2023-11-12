@@ -42,7 +42,9 @@ import EditQuiz from "./Teacher/EditQuiz";
 import AddQuizQuestions from "./Teacher/AddQuizQuestions";
 import QuizQuestions from "./Teacher/QuizQuestions";
 import AssignQuiz from "./Teacher/AssignQuiz";
-import CheckQuizinCourse from "./Teacher/CheckQuizinCourse";
+import CourseQuizList from "./User/CourseQuizList";
+import TakeQuiz from "./User/TakeQuiz";
+import Search from "./Search";
 
 function Main() {
   return (
@@ -91,6 +93,9 @@ function Main() {
         <Route path="/edit-quiz/:quiz_id" element={<EditQuiz />} />
         <Route path="/all-questions/:quiz_id" element={<QuizQuestions />} />
         <Route path="/assign-quiz/:course_id" element={<AssignQuiz />} />
+        <Route path="/course-quiz/:course_id" element={<CourseQuizList />} />
+        <Route path="/take-quiz/:quiz_id" element={<TakeQuiz />} />
+        <Route path="/search/:searchstring" element={<Search />} />
       </Routes>
       <Footer />
     </div>
