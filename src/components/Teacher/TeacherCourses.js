@@ -19,7 +19,7 @@ function TeacherCourses() {
       console.log(error);
     }
   }, []);
-  console.log(courseData);
+
 
   return (
     <div className="container mt-4">
@@ -77,6 +77,12 @@ function TeacherCourses() {
                           to={`/assign-quiz/`+course.id}
                         >
                           Assign quiz
+                        </Link>
+                        <Link
+                          className="btn btn-primary btn-sm ms-2"
+                          to={`/study-materials/`+course.id}
+                        >
+                         Study material
                         </Link>
                         <button className="btn btn-danger btn-sm ms-2">
                           delete

@@ -45,6 +45,9 @@ import AssignQuiz from "./Teacher/AssignQuiz";
 import CourseQuizList from "./User/CourseQuizList";
 import TakeQuiz from "./User/TakeQuiz";
 import Search from "./Search";
+import StudyMaterial from "./Teacher/StudyMaterial";
+import AddStudyMaterial from "./Teacher/AddStudyMaterial";
+import StudstudyMaterial from "./User/StudstudyMaterial";
 
 function Main() {
   return (
@@ -96,6 +99,10 @@ function Main() {
         <Route path="/course-quiz/:course_id" element={<CourseQuizList />} />
         <Route path="/take-quiz/:quiz_id" element={<TakeQuiz />} />
         <Route path="/search/:searchstring" element={<Search />} />
+        <Route path="/study-materials/:course_id" element={<StudyMaterial />} />
+        {/* <Route path="/edit-study/:study_id" element={<EditChapter />} /> */}
+        <Route path="/add-study/:course_id" element={<AddStudyMaterial />} />
+        <Route path="/user/study-materials/:course_id" element={<StudstudyMaterial />} />
       </Routes>
       <Footer />
     </div>
